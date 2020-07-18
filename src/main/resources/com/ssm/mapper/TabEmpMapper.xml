@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.TabEmpMapper">
+    <select id="selectAll" resultType="java.util.HashMap">
+        select a.*,b.departmentname from tab_employee a join tab_department b where a.departmentid=b.departmentid
+    </select>
+    <select id="selectEmpById" parameterType="int" resultType="java.util.HashMap">
+        select a.*,b.departmentname from tab_employee a
+        join tab_department b where a.departmentid=b.departmentid and employeeid=#{id}
+    </select>
+    <select id="selectDept" resultType="java.util.HashMap">
+        select * from tab_department
+    </select>
+    <insert id="insertEmp" parameterType="java.util.Map">
+        insert into tab_employee(employeename) values(#{name})
+    </insert>
+    <delete id="deleteEmp" parameterType="int">
+        delete from tab_employee where employeeid=#{id}
+    </delete>
+    <update id="updateEmp" parameterType="java.util.Map">
+        update tab_employee set employeename=#{name} where employeeid=#{id}
+    </update>
+    <insert id="insertSelective" parameterType="com.ssm.entity.TabEmployee">
+        insert into tab_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeid != null">
+                employeeid,
+            </if>
+            <if test="accountid != null">
+                accountid,
+            </if>
+            <if test="departmentid != null">
+                departmentid,
+            </if>
+            <if test="employeename != null">
+                employeename,
+            </if>
+            <if test="employeesex != null">
+                employeesex,
+            </if>
+            <if test="employeeage != null">
+                employeeage,
+            </if>
+            <if test="employeephone != null">
+                employeephone,
+            </if>
+            <if test="jointime != null">
+                jointime,
+            </if>
+            <if test="employeestate != null">
+                employeestate,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="chinaId != null">
+                china_id,
+            </if>
+            <if test="shopid != null">
+                shopid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="employeeid != null">
+                #{employeeid,jdbcType=INTEGER},
+            </if>
+            <if test="accountid != null">
+                #{accountid,jdbcType=INTEGER},
+            </if>
+            <if test="departmentid != null">
+                #{departmentid,jdbcType=INTEGER},
+            </if>
+            <if test="employeename != null">
+                #{employeename,jdbcType=VARCHAR},
+            </if>
+            <if test="employeesex != null">
+                #{employeesex,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeage != null">
+                #{employeeage,jdbcType=INTEGER},
+            </if>
+            <if test="employeephone != null">
+                #{employeephone,jdbcType=VARCHAR},
+            </if>
+            <if test="jointime != null">
+                #{jointime,jdbcType=DATE},
+            </if>
+            <if test="employeestate != null">
+                #{employeestate,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="chinaId != null">
+                #{chinaId,jdbcType=INTEGER},
+            </if>
+            <if test="shopid != null">
+                #{shopid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ssm.entity.TabEmployee">
+        update tab_employee
+        <set>
+            <if test="accountid != null">
+                accountid = #{accountid,jdbcType=INTEGER},
+            </if>
+            <if test="departmentid != null">
+                departmentid = #{departmentid,jdbcType=INTEGER},
+            </if>
+            <if test="employeename != null">
+                employeename = #{employeename,jdbcType=VARCHAR},
+            </if>
+            <if test="employeesex != null">
+                employeesex = #{employeesex,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeage != null">
+                employeeage = #{employeeage,jdbcType=INTEGER},
+            </if>
+            <if test="employeephone != null">
+                employeephone = #{employeephone,jdbcType=VARCHAR},
+            </if>
+            <if test="jointime != null">
+                jointime = #{jointime,jdbcType=DATE},
+            </if>
+            <if test="employeestate != null">
+                employeestate = #{employeestate,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="chinaId != null">
+                china_id = #{chinaId,jdbcType=INTEGER},
+            </if>
+            <if test="shopid != null">
+                shopid = #{shopid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where employeeid = #{employeeid,jdbcType=INTEGER}
+    </update>
+</mapper>

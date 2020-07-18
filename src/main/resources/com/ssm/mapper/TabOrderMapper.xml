@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.TabOrderMapper">
+    <select id="selectOrder" resultType="java.util.HashMap">
+        select * from tab_order
+    </select>
+    <select id="selectOrderdetail" parameterType="int" resultType="java.util.HashMap">
+        select * from tab_orderdetail where orderdetailid=#{id}
+    </select>
+    <select id="selectAccount" resultType="java.util.HashMap" parameterType="java.util.Map">
+        select * from tab_account where username=#{username} and password=#{password}
+    </select>
+    <select id="selectVip" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select * from tab_vip where vipphone=#{vipphone}
+    </select>
+    <select id="selectPro" resultType="java.util.HashMap">
+        select * from tab_product
+    </select>
+    <select id="selectPro2" resultType="java.util.HashMap" parameterType="java.util.Map">
+        select * from tab_product where productid=#{productid}
+    </select>
+</mapper>

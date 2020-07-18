@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:task="http://www.springframework.org/schema/task"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    <!--扫描包，被扫描到的注解会生效 -->
+    <context:component-scan base-package="com.ssm"/>
+    <!--启动AOP的自动的代理生成-->
+    <aop:aspectj-autoproxy/>
+
+    <context:property-placeholder location="classpath:config/db.properties"/>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="password" value="${db.password}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="driverClassName" value="${db.classname}"/>
+        <property name="url" value="${db.url}"/>
+    </bean>
+    <!--事务管理的一个类-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--启动注解事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:config/mybaits-config.xml"/>
+        <property name="mapperLocations" value="classpath:com/ssm/mapper/*.xml"/>
+    </bean>
+    <!--getMapper获取代理类：以后由Spring管理-->
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ssm.mapper"/>
+        <property name="properties">
+            <value>
+                mappers=tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.common.special.InsertListMapper
+            </value>
+        </property>
+
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+
+    <bean id="empS" class="com.ssm.aop.service.EmpServiceImpl"/>
+    <bean id="advice" class="com.ssm.aop.aspect.CommonAdvice"/>
+    <!--切入点配置  以及织入-->
+    <aop:config>
+        <!--配置切入点（多个连接点），所以一般有类似正则表达式的一套规则-->
+        <aop:pointcut id="pt" expression="execution(* com.ssm.aop.service.*.*(..))"/>
+        <!--配置通知和切入点的链接——织入-->
+        <aop:aspect id="as" ref="advice">
+            <!--advice类中的before方法代码，加到com.aop.service下的所有类的所有方法前边-->
+            <aop:before method="before" pointcut-ref="pt"/>
+            <aop:after method="after" pointcut-ref="pt"/>
+            <aop:after-returning method="afterReturn" pointcut-ref="pt"/>
+            <!--通知方法参数名，Exception  e，如果该一起改-->
+            <aop:after-throwing method="afterThrow" pointcut-ref="pt" throwing="e"/>
+            <aop:around method="arround" pointcut-ref="pt"/>
+        </aop:aspect>
+    </aop:config>
+    <!-- 定时器开关 单线程 不指定线程池-->
+    <!--<task:annotation-driven/>-->
+    <!-- 定时器开关 多线程-->
+    <task:scheduler id="myScheduler" pool-size="5"/>
+    <task:annotation-driven scheduler="myScheduler"/>
+</beans>

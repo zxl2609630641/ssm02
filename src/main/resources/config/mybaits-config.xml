@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+        <!--启动驼峰转换的映射 默认false-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--列名对应实体属性名：如果一致可以直接对应-->
+        <setting name="autoMappingBehavior" value="PARTIAL"/>
+        <!--日志打印设置到控制台所有的执行sql和参数都会在控制台打印-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <plugins>
+        <!--<plugin interceptor="com.aaa.mybatis04.inter"/>-->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        </plugin>
+    </plugins>
+</configuration>
